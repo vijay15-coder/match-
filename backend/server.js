@@ -9,8 +9,16 @@ const matchRouter = require('./routes/match');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS Setup — allow your Render backend URL
+app.use(cors({
+  origin: [
+    "https://matchmaking-2-06m2.onrender.com", // your Render web service URL
+    "http://localhost:3000"                   // dev frontend access
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -24,7 +32,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 // Check if missing Mongo URI (helpful for Render)
 if (!MONGO_URI) {
-  console.error("❌ ERROR: MONGO_URI is missing!");
+  console.error("❌ ERROR: MONGO_URI is missing from .env!");
   process.exit(1);
 }
 
